@@ -17,6 +17,9 @@ import org.jetbrains.exposed.sql.javatime.datetime
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.context.annotation.Configuration
 
+object UniquePublisher: Table("publisher"){
+    val publisher = varchar("publisher", 255)
+}
 
 object Product : Table("product") {
     val createdDate  = varchar("createdDate", 20)
@@ -24,20 +27,20 @@ object Product : Table("product") {
     val logo = varchar("logo", 255).default("")
     val title = varchar("title", 255)
     val author = varchar("author", 255)
-    val pubDate = varchar("pubDate", 10)  // 이 데이터 형식에 따라 수정
-    val description = varchar("description", 500)  // 이 데이터 형식에 따라 수정
-    val isbn = varchar("isbn", 13)  // 이 데이터 형식에 따라 수정
-    val isbn13 = varchar("isbn13", 13)  // 이 데이터 형식에 따라 수정
+    val pubDate = varchar("pubDate", 10)
+    val description = varchar("description", 500)
+    val isbn = varchar("isbn", 13)
+    val isbn13 = varchar("isbn13", 13)
     val itemId = integer("itemId")
     val priceSales = integer("priceSales")
     val priceStandard = integer("priceStandard")
-    val mallType = varchar("mallType", 50)  // 이 데이터 형식에 따라 수정
-    val stockStatus = varchar("stockStatus", 50)  // 이 데이터 형식에 따라 수정
+    val mallType = varchar("mallType", 50)
+    val stockStatus = varchar("stockStatus", 50)
     val mileage = integer("mileage")
-    val cover = varchar("cover", 255)  // 이 데이터 형식에 따라 수정
+    val cover = varchar("cover", 255)
     val categoryId = integer("categoryId")
-    val categoryName = varchar("categoryName", 255)  // 이 데이터 형식에 따라 수정
-    val publisher = varchar("publisher", 255)  // 이 데이터 형식에 따라 수정
+    val categoryName = varchar("categoryName", 255)
+    val publisher = varchar("publisher",255)
 }
 @Configuration
 class ProductTableSetup(private val database: Database) {

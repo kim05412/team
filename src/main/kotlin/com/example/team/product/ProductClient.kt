@@ -7,8 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping
 data class ProductListResponse(
     val item: List<ProductResponse>
 )
-data class formattedDate(
+data class FormattedDate(
     val createdDate: String
+)
+
+data class publisherResponse (
+    val publisher: String
 )
 data class ProductResponse(
     val version: String?,
@@ -31,7 +35,7 @@ data class ProductResponse(
     val publisher: String
 )
 // 베스트 셀러 http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey=ttbrlathgus5411950001&QueryType=Bestseller&MaxResults=100&start=1&SearchTarget=Book&output=xml&Version=20131101
-@FeignClient(name = "aladdin", url = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey=ttbrlathgus5411950001&QueryType=Bestseller&MaxResults=10&start=1&SearchTarget=Book&output=js&Version=20131101")
+@FeignClient(name = "aladdin", url = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey=ttbrlathgus5411950001&QueryType=Bestseller&MaxResults=100&start=1&SearchTarget=Book&output=js&Version=20131101")
 interface ProductClient {
 
     @GetMapping
