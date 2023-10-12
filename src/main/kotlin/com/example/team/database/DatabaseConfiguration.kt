@@ -1,5 +1,4 @@
-package com.example.myapp.configuration
-
+package com.example.team.database
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.DatabaseConfig
 import org.springframework.context.annotation.Bean
