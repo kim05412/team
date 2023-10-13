@@ -1,4 +1,4 @@
-package com.example.team.product
+package com.example.team.aladin
 
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
