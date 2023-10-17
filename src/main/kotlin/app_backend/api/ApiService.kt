@@ -1,7 +1,8 @@
-package com.example.team.aladin
+package com.example.app_backend.api
 
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -9,7 +10,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Service
-class AladinService(private val aladinClient: AladinClient) {
+class ApiService(private val aladinClient: AladinClient) {
 //    private val mapper = jacksonObjectMapper()
     @Scheduled(fixedRate = 1000 * 60 * 60 * 12)
     fun fetchGetBest() {
@@ -33,6 +34,7 @@ class AladinService(private val aladinClient: AladinClient) {
             for (best in bestItem) {
 //                    val bestJson = mapper.writeValueAsString(best)
                 saveBest(best, formattedDate)
+
 //                    println("저장")
 
                 val pub = best.publisher
@@ -48,8 +50,9 @@ class AladinService(private val aladinClient: AladinClient) {
     }
     fun fetchGetBook(publisher: String, formattedDate: String){
         try {
-                val bookItem = aladinClient.getBook(publisher).item
-                println(bookItem)
+            val bookItem = aladinClient.getBook(publisher).item
+//            println(bookItem)
+            //bookItem(books): book리스트
                 for (book in bookItem) {
                     saveBook(book, formattedDate)
 //                    println("saveBook 저장")
@@ -60,7 +63,6 @@ class AladinService(private val aladinClient: AladinClient) {
             transaction { commit() }
         }
     }
-
 
     //전체 데이터
     fun saveBest(best: BestResponse, formattedDate: String) {
@@ -88,9 +90,9 @@ class AladinService(private val aladinClient: AladinClient) {
                     it[categoryId] = best.categoryId
                     it[categoryName] = best.categoryName
                     it[publisher] = best.publisher
+
                 }
             }
-
         }
 
     }
@@ -139,6 +141,40 @@ class AladinService(private val aladinClient: AladinClient) {
                     it[fixedPrice] = fixedPrice
                     it[customerReviewRank] = customerReviewRank
                 }
+            copyDataToSimplifiedBooks()
+            }
+        }
+    //book 일부만
+    fun copyDataToSimplifiedBooks() {
+        transaction {
+            BookByPublisher.selectAll().forEach { row ->
+                val isbnValue = row[BookByPublisher.isbn]
+                val existingBook = SimplifiedBooks.select { SimplifiedBooks.isbn eq isbnValue }.firstOrNull()
+
+                if (existingBook == null) {
+                    SimplifiedBooks.insert {
+                        it[createdDate] = row[BookByPublisher.createdDate]
+                        it[publisher] = row[BookByPublisher.publisher]
+                        it[title] = row[BookByPublisher.title]
+                        it[link] = row[BookByPublisher.link]
+                        it[author] = row[BookByPublisher.author]
+                        it[pubDate] = row[BookByPublisher.pubDate]
+                        it[description] = row[BookByPublisher.description]
+                        it[isbn] = isbnValue
+                        it[isbn13] = row[BookByPublisher.isbn13]
+                        it[itemId] = row[BookByPublisher.itemId]
+                        it[priceSales] = row[BookByPublisher.priceSales]
+                        it[priceStandard] = row[BookByPublisher.priceStandard]
+                        it[stockStatus] = row[BookByPublisher.stockStatus]
+                        it[cover] = row[BookByPublisher.cover]
+                        it[categoryId] = row[BookByPublisher.categoryId]
+                        it[categoryName] = row[BookByPublisher.categoryName]
+                        it[customerReviewRank] = row[BookByPublisher.customerReviewRank]
+                    }
+                }
             }
         }
     }
+
+}
+

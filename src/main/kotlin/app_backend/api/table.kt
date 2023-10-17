@@ -1,10 +1,10 @@
-package com.example.team.aladin
+package com.example.app_backend.api
 
-import com.example.team.aladin.Best.default
 import jakarta.annotation.PostConstruct
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.context.annotation.Configuration
 //1
@@ -37,38 +37,60 @@ object UniquePublisher: IntIdTable("publisher"){
     val publisher = varchar("publisher", 255)
 //    override val primaryKey = PrimaryKey(id, name = "pk_publisher_id")
 }
+
+
 //3
 object BookByPublisher : IntIdTable("book"){
-    val createdDate  = varchar("createdDate", 20)
+    val createdDate  = varchar("created_date", 20)
     val publisher = varchar("publisher",32)
     val version = varchar("version", 64).default("")
     val logo = varchar("logo", 255).default("")
     val title = varchar("title", 255)
     val link = varchar("link", 512)
     val author = varchar("author", 512)
-    val pubDate = varchar("pubDate", 10)
+    val pubDate = varchar("pub_date", 10)
     val description = varchar("description", 512)
     val isbn = varchar("isbn", 13)
     val isbn13 = varchar("isbn13", 13)
-    val itemId = integer("itemId")
-    val priceSales = integer("priceSales")
-    val priceStandard = integer("priceStandard")
+    val itemId = integer("item_id")
+    val priceSales = integer("price_sales")
+    val priceStandard = integer("price_standard")
     val mallType = varchar("mallType", 50)
-    val stockStatus = varchar("stockStatus", 20)
+    val stockStatus = varchar("stock_status", 20)
     val mileage = integer("mileage")
     val cover = varchar("cover", 512)
-    val categoryId = integer("categoryId")
-    val categoryName = varchar("categoryName", 255)
-    val salesPoint = integer("salesPoint")
+    val categoryId = integer("category_id")
+    val categoryName = varchar("category_name", 255)
+    val salesPoint = integer("sales_point")
     val adult = bool("adult")
-    val fixedPrice = integer("fixedPrice")
-    val customerReviewRank = integer("customerReviewRank")
-
+    val fixedPrice = bool("fixed_price")
+    val customerReviewRank = integer("customer_review_rank")
 }
 
+object SimplifiedBooks : IntIdTable("simplified_book"){
+    val createdDate  = varchar("created_date", 20)
+    val publisher = varchar("publisher",32)
+    val title = varchar("title", 255)
+    val link = varchar("link", 512)
+    val author = varchar("author", 512)
+    val pubDate = varchar("pub_date", 10)
+    val description = varchar("description", 512)
+    val isbn = varchar("isbn", 13)
+    val isbn13 = varchar("isbn13", 13)
+    val itemId = integer("item_id")
+    val priceSales = integer("price_sales")
+    val priceStandard = integer("price_standard")
+    val stockStatus = varchar("stock_status", 20)
+    val cover = varchar("cover", 512)
+    val categoryId = integer("category_id")
+    val categoryName = varchar("category_name", 255)
+    val customerReviewRank = integer("customer_review_rank")
+    }
 
 
-// sql-create (X)
+
+
+    // sql-create (X)
 @Configuration
 // 생성자를 통해 database 객체를 주입 받음
 class BestTableSetup(private val database: Database) {
@@ -99,6 +121,15 @@ class BookByPublisherTableSetup(private val database: Database) {
     fun migrateSchema() {
         transaction(database) {
             SchemaUtils.createMissingTablesAndColumns(BookByPublisher)
+        }
+    }
+}
+@Configuration
+class SimplifiedBooksTableSetup(private val database: Database) {
+    @PostConstruct
+    fun migrateSchema() {
+        transaction(database) {
+            SchemaUtils.createMissingTablesAndColumns(SimplifiedBooks)
         }
     }
 }

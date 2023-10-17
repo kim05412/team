@@ -1,4 +1,4 @@
-package com.example.team.aladin
+package com.example.app_backend.api
 
 
 import org.springframework.cloud.openfeign.FeignClient
@@ -37,12 +37,12 @@ data class BestResponse(
     val cover: String,
     val categoryId: Int,
     val categoryName: String,
-    val publisher: String
+    val publisher: String,
 )
+
 
 // after Best
 data class BookResponse (
-
     val title: String,
     val link : String,
     val author: String,
@@ -71,20 +71,10 @@ data class BookResponse (
 interface AladinClient {
     @GetMapping("/ItemList.aspx?ttbkey=ttbrlathgus5411950001&QueryType=Bestseller&MaxResults=100&start=1&SearchTarget=Book&output=js&Version=20131101")
     fun getBest(): BestListResponse
-
     @GetMapping("/ItemSearch.aspx?ttbkey=ttbrlathgus5411950001&QueryType=Publisher&MaxResults=100&start=1&SearchTarget=Book&Version=20131101&output=js")
     fun getBook(@RequestParam("Query") publisher: String): BookListResponse
+
 }
 
-//@FeignClient(name = "aladin-service") // 서비스의 이름을 지정
-//interface ProductClient {
-//    @GetMapping("/ttb/api/ItemList.aspx") // 실제 서비스의 엔드포인트 지정
-//    fun getProduct(@RequestParam("ttbkey") ttbkey: String,
-//                   @RequestParam("QueryType") queryType: String,
-//                   @RequestParam("MaxResults") maxResults: Int,
-//                   @RequestParam("start") start: Int,
-//                   @RequestParam("SearchTarget") searchTarget: String,
-//                   @RequestParam("output") output: String,
-//                   @RequestParam("Version") version: String): List<ProductResponse>
-//
-//}
+
+

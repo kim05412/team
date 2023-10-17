@@ -1,4 +1,4 @@
-package com.example.team.database//package com.example.team.database
+package com.example.app_backend.database//package com.example.team.database
 //import com.example.myapp.auth.AuthInterceptor
 //import org.springframework.context.annotation.Configuration
 //import org.springframework.web.servlet.config.annotation.CorsRegistry
