@@ -1,5 +1,5 @@
+package app_backend.book
 
-import com.example.app_backend.api.SimplifiedBookDTO
 import com.example.app_backend.api.SimplifiedBooks
 
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,7 +13,8 @@ import org.jetbrains.exposed.sql.selectAll
 class BookController {
     @GetMapping
     fun getBooks(): List<SimplifiedBookDTO> {
-        return transaction {
+        println("getBooks() called")//함수 호출
+        val books = transaction {
             SimplifiedBooks.selectAll().map { row ->
                 SimplifiedBookDTO(
                     id = row[SimplifiedBooks.id].value,
@@ -35,7 +36,11 @@ class BookController {
                     categoryName = row[SimplifiedBooks.categoryName],
                     customerReviewRank = row[SimplifiedBooks.customerReviewRank]
                 )
+
             }
         }
+        println("Books 응답 성공")
+//        println("Books: $books") // 반환값 확인
+        return books
     }
 }
